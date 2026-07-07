@@ -38,12 +38,16 @@ A Telegram bot for quick-capture notes, reminders, and export. Node.js/TypeScrip
 
 1. Create a free account at [openrouter.ai](https://openrouter.ai) and generate a key at
    [openrouter.ai/keys](https://openrouter.ai/keys). This is your `OPENROUTER_API_KEY`.
-2. The default model (`meta-llama/llama-3.3-70b-instruct:free`) costs nothing but has lower rate
-   limits than the paid version of the same model. OpenRouter's free model lineup changes over
-   time and models are occasionally retired — if `/summary` starts failing with a 404 (model not
-   found) or "no longer available for free", browse [openrouter.ai/models](https://openrouter.ai/models),
-   filter by "Free", and set `OPENROUTER_MODEL` to a current `:free` model id. For a paid model
-   instead, drop the `:free` suffix and add credits to your account at
+2. The default (`openrouter/free`) is OpenRouter's free-model router — it costs nothing and
+   automatically picks from whichever free models are currently live, so it keeps working even as
+   individual free model slugs get added/retired. Its one downside: it can occasionally pick a
+   non-open-weight model from the free pool (e.g. a free Gemini variant) instead of an open-weight
+   one like Llama/Qwen.
+3. If you'd rather pin a specific open-weight model, browse
+   [openrouter.ai/models](https://openrouter.ai/models), filter by "Free", and set
+   `OPENROUTER_MODEL` to its id (e.g. `meta-llama/llama-3.3-70b-instruct:free`) — but note specific
+   free slugs get retired over time, which will make `/summary` fail with a 404 until you update
+   it. For a paid model instead, drop the `:free` suffix and add credits to your account at
    [openrouter.ai/settings/credits](https://openrouter.ai/settings/credits) — paid models return a
    402 error without credits.
 
