@@ -1,0 +1,28 @@
+{
+  "name": "brain-dump-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for quick-capture notes, reminders, and export, backed by Postgres.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/bot.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/bot.js",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "chrono-node": "^2.7.7",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.45.2",
+    "grammy": "^1.30.0",
+    "postgres": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "drizzle-kit": "^0.30.6",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
