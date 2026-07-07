@@ -11,6 +11,7 @@ import {
   handleStart,
 } from "./handlers/commands.js";
 import { handleRemind } from "./handlers/remind.js";
+import { handleSummary } from "./handlers/summary.js";
 import { startReminderScheduler } from "./scheduler/reminders.js";
 
 const bot = new Bot(env.BOT_TOKEN);
@@ -32,6 +33,7 @@ bot.command("reminders", handleListReminders);
 bot.command("cancel", handleCancelReminder);
 bot.command("delete", handleDelete);
 bot.command("export", handleExport);
+bot.command("summary", handleSummary);
 
 bot.on("message:text").filter((ctx) => !ctx.message.text.startsWith("/"), handleCapture);
 
@@ -46,6 +48,7 @@ await bot.api.setMyCommands([
   { command: "cancel", description: "Cancel a reminder by id" },
   { command: "delete", description: "Delete a note by id" },
   { command: "export", description: "Export notes as a markdown file" },
+  { command: "summary", description: "Get an AI summary of your notes" },
   { command: "help", description: "Show help" },
 ]);
 

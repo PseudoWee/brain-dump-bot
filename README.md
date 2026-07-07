@@ -12,6 +12,8 @@ A Telegram bot for quick-capture notes, reminders, and export. Node.js/TypeScrip
 - `/reminders` / `/cancel <id>` - manage upcoming reminders.
 - `/delete <note_id>` - delete a note.
 - `/export [days]` - export your notes as a Markdown file (omit `days` for everything).
+- `/summary [days]` - get an AI-written summary of your notes via an open-weight LLM
+  (omit `days` for everything).
 
 ## 1. Create the Telegram bot
 
@@ -32,7 +34,17 @@ A Telegram bot for quick-capture notes, reminders, and export. Node.js/TypeScrip
 3. Copy the connection string — note the username is `postgres.<project-ref>`, not just
    `postgres`, when using a pooler. This is your `DATABASE_URL`.
 
-## 3. Configure locally
+## 3. Get an OpenRouter API key (for /summary)
+
+1. Create a free account at [openrouter.ai](https://openrouter.ai) and generate a key at
+   [openrouter.ai/keys](https://openrouter.ai/keys). This is your `OPENROUTER_API_KEY`.
+2. The default model (`meta-llama/llama-3.3-70b-instruct`, an open-weight Llama model) is cheap
+   pay-as-you-go. To use a fully free model instead, browse
+   [openrouter.ai/models](https://openrouter.ai/models) for a `:free` variant (e.g.
+   `meta-llama/llama-3.1-8b-instruct:free`) and set `OPENROUTER_MODEL` to it — free models have
+   lower rate limits and are less capable than the 70b default.
+
+## 4. Configure locally
 
 ```bash
 cd brain-dump-bot
@@ -47,6 +59,8 @@ Fill in `.env`:
 - `TZ` — IANA timezone for interpreting reminder times, e.g. `Asia/Singapore` (defaults to UTC).
 - `ALLOWED_USER_IDS` — optional, comma-separated Telegram user IDs to restrict the bot to just you
   (get your ID from [@userinfobot](https://t.me/userinfobot)).
+- `OPENROUTER_API_KEY` — from step 3 above. Required — the bot won't start without it.
+- `OPENROUTER_MODEL` — optional, defaults to `meta-llama/llama-3.3-70b-instruct`.
 
 Push the schema to your database:
 
@@ -62,12 +76,14 @@ npm run dev
 
 Message your bot on Telegram to try it out.
 
-## 4. Deploy to Railway
+## 5. Deploy to Railway
 
 1. Create a project at [railway.app](https://railway.app) and connect this repo (or `railway init`
    + `railway up` from the CLI).
-2. In the Railway project's **Variables** tab, set `BOT_TOKEN`, `DATABASE_URL`, `TZ`, and
-   `ALLOWED_USER_IDS` to the same values as your `.env`.
+2. In the Railway project's **Variables** tab, set `BOT_TOKEN`, `DATABASE_URL`, `TZ`,
+   `ALLOWED_USER_IDS`, `OPENROUTER_API_KEY`, and `OPENROUTER_MODEL` to the same values as your
+   `.env`. All except `TZ`/`ALLOWED_USER_IDS`/`OPENROUTER_MODEL` are required — the bot crashes on
+   startup if any required variable is missing.
 3. Railway will build using the included `Dockerfile` and start the bot with `node dist/bot.js`.
    It runs as a long-lived process using Telegram long polling, so no public URL/webhook is needed.
 4. Check the deploy logs for `Brain Dump bot is running.`

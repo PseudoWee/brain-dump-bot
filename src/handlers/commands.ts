@@ -1,8 +1,9 @@
-import { and, desc, eq, gte } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { InputFile } from "grammy";
 import type { CommandContext, Context } from "grammy";
 import { db } from "../db/client.js";
 import { notes, reminders } from "../db/schema.js";
+import { getNotesForRange } from "../lib/notes.js";
 import { getOrCreateUser } from "../lib/users.js";
 import { env } from "../env.js";
 
@@ -18,6 +19,7 @@ export async function handleStart(ctx: Context) {
       "/cancel <reminder_id> - cancel a reminder\n" +
       "/delete <note_id> - delete a note\n" +
       "/export [days] - export your notes as a markdown file (all notes if omitted)\n" +
+      "/summary [days] - get an AI-written summary of your notes (all notes if omitted)\n" +
       "/help - show this message",
   );
 }
@@ -126,20 +128,10 @@ export async function handleCancelReminder(ctx: CommandContext<Context>) {
 export async function handleExport(ctx: CommandContext<Context>) {
   const user = await getOrCreateUser(ctx);
   const daysArg = Number(ctx.match?.toString().trim());
+  const days = Number.isFinite(daysArg) && daysArg > 0 ? daysArg : null;
+  const label = days ? `last-${days}-days` : "all-time";
 
-  const conditions = [eq(notes.userId, user.id)];
-  let label = "all-time";
-  if (Number.isFinite(daysArg) && daysArg > 0) {
-    const since = new Date(Date.now() - daysArg * 24 * 60 * 60 * 1000);
-    conditions.push(gte(notes.createdAt, since));
-    label = `last-${daysArg}-days`;
-  }
-
-  const rows = await db
-    .select()
-    .from(notes)
-    .where(and(...conditions))
-    .orderBy(notes.createdAt);
+  const rows = await getNotesForRange(user.id, days);
 
   if (rows.length === 0) {
     await ctx.reply("No notes to export for that range.");
