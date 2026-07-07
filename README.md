@@ -38,11 +38,12 @@ A Telegram bot for quick-capture notes, reminders, and export. Node.js/TypeScrip
 
 1. Create a free account at [openrouter.ai](https://openrouter.ai) and generate a key at
    [openrouter.ai/keys](https://openrouter.ai/keys). This is your `OPENROUTER_API_KEY`.
-2. The default model (`meta-llama/llama-3.3-70b-instruct`, an open-weight Llama model) is cheap
-   pay-as-you-go. To use a fully free model instead, browse
-   [openrouter.ai/models](https://openrouter.ai/models) for a `:free` variant (e.g.
-   `meta-llama/llama-3.1-8b-instruct:free`) and set `OPENROUTER_MODEL` to it — free models have
-   lower rate limits and are less capable than the 70b default.
+2. The default model (`meta-llama/llama-3.1-8b-instruct:free`) costs nothing but has lower rate
+   limits and is less capable than larger models. For better quality, browse
+   [openrouter.ai/models](https://openrouter.ai/models) for a paid open-weight model (e.g.
+   `meta-llama/llama-3.3-70b-instruct`), set `OPENROUTER_MODEL` to it, and add credits to your
+   OpenRouter account at [openrouter.ai/settings/credits](https://openrouter.ai/settings/credits)
+   — paid models return a 402 error without credits.
 
 ## 4. Configure locally
 
