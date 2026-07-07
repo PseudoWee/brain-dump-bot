@@ -6,7 +6,7 @@ import { parseWhen } from "../lib/dateParser.js";
 import { getOrCreateUser } from "../lib/users.js";
 import { env } from "../env.js";
 
-const SAVED_NOTE_PATTERN = /Saved as note #(\d+)/;
+export const SAVED_NOTE_PATTERN = /Saved as note #(\d+)/;
 
 export async function handleRemind(ctx: CommandContext<Context>) {
   const user = await getOrCreateUser(ctx);

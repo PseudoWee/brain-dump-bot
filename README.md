@@ -14,6 +14,13 @@ A Telegram bot for quick-capture notes, reminders, and export. Node.js/TypeScrip
 - `/export [days]` - export your notes as a Markdown file (omit `days` for everything).
 - `/summary [days]` - get an AI-written summary of your notes via an open-weight LLM
   (omit `days` for everything).
+- **Natural language**: you don't have to remember slash syntax. Chatting normally — "remind me
+  about note 3 tomorrow at 9am", "delete note 1", "show my reminders", "summarize the last 7 days" -
+  gets routed to the same commands above. A message only pays for an LLM classification call if it
+  contains a command-like keyword (remind/delete/cancel/summar/export/list/show); anything else is
+  saved as a plain note instantly, same as before. Since this relies on the same LLM as `/summary`,
+  it can occasionally misfire on ambiguous phrasing — if it does, just use the slash command
+  directly for precision.
 
 ## 1. Create the Telegram bot
 

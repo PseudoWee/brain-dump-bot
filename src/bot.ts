@@ -1,6 +1,5 @@
 import { Bot } from "grammy";
 import { env } from "./env.js";
-import { handleCapture } from "./handlers/capture.js";
 import {
   handleCancelReminder,
   handleDelete,
@@ -10,6 +9,7 @@ import {
   handleListReminders,
   handleStart,
 } from "./handlers/commands.js";
+import { routeMessage } from "./handlers/naturalLanguage.js";
 import { handleRemind } from "./handlers/remind.js";
 import { handleSummary } from "./handlers/summary.js";
 import { startReminderScheduler } from "./scheduler/reminders.js";
@@ -35,7 +35,7 @@ bot.command("delete", handleDelete);
 bot.command("export", handleExport);
 bot.command("summary", handleSummary);
 
-bot.on("message:text").filter((ctx) => !ctx.message.text.startsWith("/"), handleCapture);
+bot.on("message:text").filter((ctx) => !ctx.message.text.startsWith("/"), routeMessage);
 
 bot.catch((err) => {
   console.error("Bot error:", err.error);

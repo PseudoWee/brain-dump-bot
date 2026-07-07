@@ -11,8 +11,10 @@ export async function handleStart(ctx: Context) {
   await getOrCreateUser(ctx);
   await ctx.reply(
     "Brain Dump bot is ready.\n\n" +
-      "Send me any text and I'll save it as a note.\n\n" +
-      "Commands:\n" +
+      "Send me any text and I'll save it as a note. You can also just chat naturally for " +
+      "everything else, e.g. \"remind me about note 3 tomorrow at 9am\", \"delete note 1\", " +
+      "\"show my reminders\", \"summarize the last 7 days\" - no need to remember slash commands.\n\n" +
+      "Or use the commands directly:\n" +
       "/notes [n] - show your last n notes (default 10)\n" +
       "/remind <when> - reply to a saved-note confirmation to set a reminder\n" +
       "/reminders - list your upcoming reminders\n" +
