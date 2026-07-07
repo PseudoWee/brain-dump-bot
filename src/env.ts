@@ -29,5 +29,5 @@ export const env = {
   TZ: process.env.TZ || "UTC",
   ALLOWED_USER_IDS: parseAllowedUserIds(process.env.ALLOWED_USER_IDS || ""),
   OPENROUTER_API_KEY: required("OPENROUTER_API_KEY"),
-  OPENROUTER_MODEL: process.env.OPENROUTER_MODEL || "meta-llama/llama-3.1-8b-instruct:free",
+  OPENROUTER_MODEL: process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free",
 };
