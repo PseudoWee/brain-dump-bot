@@ -1,4 +1,5 @@
 import type { CommandContext, Context } from "grammy";
+import telegramifyMarkdown from "telegramify-markdown";
 import { getNotesForRange } from "../lib/notes.js";
 import { summarizeNotes } from "../lib/openrouter.js";
 import { getOrCreateUser } from "../lib/users.js";
@@ -25,7 +26,8 @@ export async function handleSummary(ctx: CommandContext<Context>) {
   try {
     const summary = await summarizeNotes(noteLines);
     const label = days ? `last ${days} day${days === 1 ? "" : "s"}` : "all notes";
-    await ctx.reply(`Summary (${label}, ${rows.length} note${rows.length === 1 ? "" : "s"}):\n\n${summary}`);
+    const message = `Summary (${label}, ${rows.length} note${rows.length === 1 ? "" : "s"}):\n\n${summary}`;
+    await ctx.reply(telegramifyMarkdown(message, "escape"), { parse_mode: "MarkdownV2" });
   } catch (err) {
     console.error("Summary generation failed:", err);
     await ctx.reply("Sorry, I couldn't generate a summary right now. Try again later.");
